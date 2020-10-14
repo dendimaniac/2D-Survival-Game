@@ -37,7 +37,7 @@ namespace Props
             foregroundImage.fillAmount = 1f;
         }
 
-        public void SetHealth(Health healthToSet)
+        private void SetHealth(Health healthToSet)
         {
             _health = healthToSet;
             healthToSet.OnHealthPctChanged += HandleHealthChanged;
@@ -84,21 +84,19 @@ namespace Props
             _health.OnHealthPctChanged -= HandleHealthChanged;
         }
         
-        public class Pool : MemoryPool<HealthBar>
+        public class Pool : MemoryPool<Health, HealthBar>
         {
             protected override void OnDespawned(HealthBar item)
             {
-                base.OnDespawned(item);
-                
                 if (!item) return;
                 item.gameObject.SetActive(false);
             }
 
-            protected override void OnSpawned(HealthBar item)
+            protected override void Reinitialize(Health health, HealthBar item)
             {
-                base.OnSpawned(item);
                 item.gameObject.SetActive(true);
                 item.ResetHealthBar();
+                item.SetHealth(health);
             }
         }
     }

@@ -27,9 +27,8 @@ namespace Helpers
         {
             if (_healthBars.ContainsKey(health)) return;
             
-            var newHealthBar = _healthBarPool.Spawn();
+            var newHealthBar = _healthBarPool.Spawn(health);
             newHealthBar.transform.SetParent(transform);
-            newHealthBar.SetHealth(health);
             _healthBars.Add(health, newHealthBar);
         }
 

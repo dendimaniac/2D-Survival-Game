@@ -36,7 +36,7 @@ namespace Props
 
         #endregion
 
-        private void OnEnable()
+        private void Start()
         {
             CurrentHealth = maxHealth;
             OnHealthAdded(this);
