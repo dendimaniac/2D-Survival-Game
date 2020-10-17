@@ -98,9 +98,8 @@ namespace Props
             _memoryPool.Despawn(this);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            if (!_health) return;
             _health.OnHealthPctChanged -= HandleHealthChanged;
         }
 
