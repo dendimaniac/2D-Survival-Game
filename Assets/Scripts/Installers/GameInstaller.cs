@@ -1,4 +1,3 @@
-using CustomFactories;
 using Data;
 using Helpers;
 using Props;
@@ -13,7 +12,6 @@ namespace Installers
     {
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private GameManager _gameManager;
-        [SerializeField] private HealthBar _healthBar;
 
         public override void InstallBindings()
         {
@@ -26,10 +24,6 @@ namespace Installers
 
             Container.BindInterfacesAndSelfTo<Score>().AsSingle();
             Container.Bind<HitCombo>().AsSingle();
-
-            Container.BindMemoryPool<HealthBar, HealthBar.Pool>().WithInitialSize(10)
-                .FromComponentInNewPrefab(_healthBar)
-                .WithGameObjectName("HealthBar");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Helpers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using Zenject;
 
 namespace Props
 {
-    public class HealthBar : MonoBehaviour
+    public class HealthBar : MonoBehaviour, IPoolable<Health, IMemoryPool>, IDisposable
     {
         #region SerializeFields
 
@@ -20,6 +21,7 @@ namespace Props
 
         private Health _health;
         private GameManager _gameManager;
+        private IMemoryPool _memoryPool;
 
         [Inject]
         public void Construct(GameManager gameManager)
@@ -27,7 +29,7 @@ namespace Props
             _gameManager = gameManager;
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             FadeHealthBar(0, 0);
         }
@@ -37,7 +39,7 @@ namespace Props
             foregroundImage.fillAmount = 1f;
         }
 
-        public void SetHealth(Health healthToSet)
+        private void SetHealth(Health healthToSet)
         {
             _health = healthToSet;
             healthToSet.OnHealthPctChanged += HandleHealthChanged;
@@ -78,28 +80,33 @@ namespace Props
                 .WorldToScreenPoint(_health.transform.position + positionOffset * Vector3.up);
             transform.position = worldToScreenPoint;
         }
+        
+        public void OnDespawned()
+        {
+            _memoryPool = null;
+        }
+
+        public void OnSpawned(Health health, IMemoryPool memoryPool)
+        {
+            _memoryPool = memoryPool;
+            ResetHealthBar();
+            SetHealth(health);
+        }
+
+        public void Dispose()
+        {
+            _memoryPool.Despawn(this);
+        }
 
         private void OnDisable()
         {
+            if (!_health) return;
             _health.OnHealthPctChanged -= HandleHealthChanged;
         }
-        
-        public class Pool : MemoryPool<HealthBar>
-        {
-            protected override void OnDespawned(HealthBar item)
-            {
-                base.OnDespawned(item);
-                
-                if (!item) return;
-                item.gameObject.SetActive(false);
-            }
 
-            protected override void OnSpawned(HealthBar item)
-            {
-                base.OnSpawned(item);
-                item.gameObject.SetActive(true);
-                item.ResetHealthBar();
-            }
+        public class Factory : PlaceholderFactory<Health, HealthBar>
+        {
+            
         }
     }
 }
