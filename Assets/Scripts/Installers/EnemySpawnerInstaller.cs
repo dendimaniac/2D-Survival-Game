@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Installers
 {
-    public class SpawnerInstaller : MonoInstaller
+    public class EnemySpawnerInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {

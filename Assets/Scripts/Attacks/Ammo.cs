@@ -34,8 +34,8 @@ namespace Attacks
         {
             AmmoPickups.OnAmmoPickedUp += RefillAmmo;
 
-            this._maxAmmo = maxAmmo;
-            this._maxAmmoPerClip = maxAmmoPerClip;
+            _maxAmmo = maxAmmo;
+            _maxAmmoPerClip = maxAmmoPerClip;
             CurrentMaxAmmo = maxAmmo;
             CurrentAmmo = maxAmmoPerClip;
             OnAmmoChanged?.Invoke(this);

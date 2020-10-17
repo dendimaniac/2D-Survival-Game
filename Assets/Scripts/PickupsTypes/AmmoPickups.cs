@@ -1,6 +1,5 @@
 ﻿﻿using System;
-using Pools;
-using UnityEngine;
+ using UnityEngine;
 
 namespace PickupsTypes
 {
@@ -12,8 +11,8 @@ namespace PickupsTypes
 
         protected override void OnPickedUp()
         {
+            base.OnPickedUp();
             OnAmmoPickedUp?.Invoke(ammoAmount);
-            AmmoPickupsPool.Instance.ReturnToPool(this);
         }
     }
 }

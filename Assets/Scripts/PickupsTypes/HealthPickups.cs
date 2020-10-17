@@ -11,8 +11,8 @@ namespace PickupsTypes
 
         protected override void OnPickedUp()
         {
+            base.OnPickedUp();
             OnHealthPickedUp?.Invoke(healAmount);
-            Destroy(gameObject);
         }
     }
 }
