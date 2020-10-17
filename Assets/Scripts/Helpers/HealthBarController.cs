@@ -8,12 +8,12 @@ namespace Helpers
     public class HealthBarController : MonoBehaviour
     {
         private readonly Dictionary<Health, HealthBar> _healthBars = new Dictionary<Health, HealthBar>();
-        private HealthBar.Pool _healthBarPool;
+        private HealthBar.Factory _healthBarFactory;
 
         [Inject]
-        public void Construct(HealthBar.Pool healthBarPool)
+        public void Construct(HealthBar.Factory healthBarFactory)
         {
-            _healthBarPool = healthBarPool;
+            _healthBarFactory = healthBarFactory;
         }
 
         private void Awake()
@@ -27,7 +27,7 @@ namespace Helpers
         {
             if (_healthBars.ContainsKey(health)) return;
             
-            var newHealthBar = _healthBarPool.Spawn(health);
+            var newHealthBar = _healthBarFactory.Create(health);
             newHealthBar.transform.SetParent(transform);
             _healthBars.Add(health, newHealthBar);
         }
@@ -36,9 +36,12 @@ namespace Helpers
         {
             if (!_healthBars.ContainsKey(health)) return;
 
-            _healthBarPool.Despawn(_healthBars[health]);
+            if (_healthBars[health] != null)
+            {
+                _healthBars[health].Dispose();
+            }
             _healthBars.Remove(health);
-            if (_healthBarPool.NumTotal != 0) return;
+            if (_healthBars.Count != 0) return;
 
             Health.OnHealthAdded -= AddHealthBar;
             Health.OnHealthRemoved -= RemoveHealthBar;

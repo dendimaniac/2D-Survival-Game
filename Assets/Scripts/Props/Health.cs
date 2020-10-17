@@ -1,4 +1,5 @@
 ﻿using System;
+using Helpers;
 using Interfaces;
 using UnityEngine;
 
@@ -7,19 +8,11 @@ namespace Props
     [RequireComponent(typeof(Animator))]
     public abstract class Health : MonoBehaviour, IDamageable
     {
-        #region ExposedFields
-
-        public static event Action<Health> OnHealthAdded = delegate { };
-        public static event Action<Health> OnHealthRemoved = delegate { };
+        public static event Action<Health> OnHealthAdded;
+        public static event Action<Health> OnHealthRemoved;
         public event Action<float> OnHealthPctChanged;
 
         [SerializeField] protected int maxHealth = 100;
-
-        #endregion
-
-        #region NonExposedFields
-
-        private int _currentHealth;
 
         protected int CurrentHealth
         {
@@ -34,12 +27,12 @@ namespace Props
             }
         }
 
-        #endregion
+        private int _currentHealth;
 
         private void Start()
         {
             CurrentHealth = maxHealth;
-            OnHealthAdded(this);
+            OnHealthAdded?.Invoke(this);
         }
 
         public virtual void TakeDamage(int damageAmount)
@@ -55,7 +48,7 @@ namespace Props
 
         protected virtual void OnDisable()
         {
-            OnHealthRemoved(this);
+            OnHealthRemoved?.Invoke(this);
         }
     }
 }
