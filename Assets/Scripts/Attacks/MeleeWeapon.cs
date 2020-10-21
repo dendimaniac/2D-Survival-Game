@@ -12,7 +12,13 @@ namespace Attacks
         [SerializeField] private PlayerInput playerInput;
         
         private MeleeWeaponAnimatorHandler _animatorHandler;
-        [Inject] private readonly SignalBus _signalBus;
+        private SignalBus _signalBus;
+
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
         
         protected override void Awake()
         {
@@ -33,7 +39,7 @@ namespace Attacks
 
         protected virtual bool CantDamage()
         {
-            return !playerInput.canShoot || !(Timer >= timeBetweenAttack);
+            return !playerInput.CanShoot || !(Timer >= timeBetweenAttack);
         }
 
         private void DisableOnDead()

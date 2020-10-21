@@ -1,4 +1,5 @@
 using Data;
+using NSubstitute;
 using NUnit.Framework;
 using Zenject;
 
@@ -7,30 +8,37 @@ namespace Tests
     [TestFixture]
     public class ScoreTest : ZenjectUnitTestFixture
     {
+        [Inject]
         private Score _score;
+        private HitCombo _fakeHitCombo;
+
+        private void CommonInstall()
+        {
+            SignalBusInstaller.Install(Container);
+            Container.Bind<Score>().AsSingle();
+            _fakeHitCombo = Substitute.For<HitCombo>();
+            Container.Bind<HitCombo>().FromInstance(_fakeHitCombo).AsSingle();
+            Container.Inject(this);
+        }
         
+        [SetUp]
         public override void Setup()
         {
             base.Setup();
             
-            SignalBusInstaller.Install(Container);
-
-            Container.Bind<Score>().AsSingle();
-            Container.Bind<HitCombo>().FromNew().AsSingle();
-            _score = Container.Resolve<Score>();
+            CommonInstall();
         }
 
         [Test]
-        public void Current_Score_Reset_To_0_When_Call_Score_Reset()
+        public void ResetScore_Should_Set_The_Score_To_0()
         {
             _score.ResetScore();
             
             Assert.AreEqual(0, _score.CurrentScore);
-            Assert.AreEqual(0, _score.HitCombo.CurrentHitCombo);
         }
-        
+
         [Test]
-        public void Current_Score_Increased_By_The_Score_Increment_Amount_When_Increase_One_Time()
+        public void IncreaseScore_Should_Increase_Score_By_Increment_Amount()
         {
             _score.ResetScore();
             _score.IncreaseScore();
@@ -39,7 +47,7 @@ namespace Tests
         }
         
         [Test]
-        public void Current_Score_Increased_By_The_Score_Increment_Plus_Score_Increment_Multiply_By_Combo_When_Increase_Twice()
+        public void IncreaseScore_Twice_Should_Increase_Score_By_Increment_Amount_Times_Three()
         {
             _score.ResetScore();
             _score.IncreaseScore();

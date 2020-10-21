@@ -1,4 +1,5 @@
 ﻿using Helpers;
+using Interfaces;
 using UnityEngine;
 
 namespace Player
@@ -7,10 +8,11 @@ namespace Player
     public class PlayerInput : MonoBehaviour
     {
         [SerializeField] private Camera mainCamera;
-        
-        [HideInInspector] public bool canShoot;
-        [HideInInspector] public float h, v;
-        [HideInInspector] public Vector2 rotateDirection;
+
+        public bool CanShoot { get; private set; }
+        public float HorizontalMovement { get; private set; }
+        public float VerticalMovement { get; private set; }
+        public Vector2 RotateDirection { get; private set; }
 
         private bool _readyToClear;
 
@@ -20,8 +22,8 @@ namespace Player
 
             ProcessInputs();
 
-            h = Mathf.Clamp(h, -1f, 1f);
-            v = Mathf.Clamp(v, -1f, 1f);
+            HorizontalMovement = Mathf.Clamp(HorizontalMovement, -1f, 1f);
+            VerticalMovement = Mathf.Clamp(VerticalMovement, -1f, 1f);
         }
 
         private void ClearInput()
@@ -29,23 +31,23 @@ namespace Player
             if (!_readyToClear)
                 return;
 
-            h = 0f;
-            v = 0f;
-            rotateDirection = Vector2.zero;
-            canShoot = false;
+            HorizontalMovement = 0f;
+            VerticalMovement = 0f;
+            RotateDirection = Vector2.zero;
+            CanShoot = false;
 
             _readyToClear = false;
         }
 
         private void ProcessInputs()
         {
-            h += Input.GetAxisRaw("Horizontal");
-            v += Input.GetAxisRaw("Vertical");
+            HorizontalMovement += Input.GetAxisRaw("Horizontal");
+            VerticalMovement += Input.GetAxisRaw("Vertical");
 
-            canShoot = canShoot || Input.GetButton("Fire1");
+            CanShoot = CanShoot || Input.GetButton("Fire1");
 
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            rotateDirection = (mousePosition - (Vector2) transform.position).normalized;
+            RotateDirection = (mousePosition - (Vector2) transform.position).normalized;
         }
 
         private void FixedUpdate()

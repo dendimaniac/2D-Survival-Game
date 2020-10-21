@@ -32,6 +32,13 @@ namespace Data
             _signalBus = signalBus;
             HitCombo = hitCombo;
         }
+        
+        public void Initialize()
+        {
+            ResetScore();
+            _signalBus.Subscribe<GameLostSignal>(SaveScore);
+            EnemyHealth.OnEnemyHit += IncreaseScore;
+        }
 
         public void ResetScore()
         {
@@ -60,13 +67,6 @@ namespace Data
         public void Dispose()
         {
             _signalBus.Unsubscribe<GameLostSignal>(SaveScore);
-        }
-
-        public void Initialize()
-        {
-            ResetScore();
-            _signalBus.Subscribe<GameLostSignal>(SaveScore);
-            EnemyHealth.OnEnemyHit += IncreaseScore;
         }
     }
 }

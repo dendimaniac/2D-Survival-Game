@@ -58,11 +58,11 @@ namespace Attacks
         {
             if (useAmmo)
             {
-                return !playerInput.canShoot || !(Time.time >= NextTimeToFire) || _ammo.IsAmmoEmpty() ||
+                return !playerInput.CanShoot || !(Time.time >= NextTimeToFire) || _ammo.IsAmmoEmpty() ||
                        _ammo.IsReloading;
             }
 
-            return !playerInput.canShoot || !(Time.time >= NextTimeToFire);
+            return !playerInput.CanShoot || !(Time.time >= NextTimeToFire);
         }
 
         private void OnDisable()
