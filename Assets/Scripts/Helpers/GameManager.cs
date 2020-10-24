@@ -1,16 +1,12 @@
-﻿using Data;
-using Player;
+﻿using Player;
 using Signals;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Helpers
 {
     public class GameManager : MonoBehaviour
     {
-        public Camera mainCamera;
-
         private SignalBus _signalBus;
         private PlayerInput _playerInput;
 

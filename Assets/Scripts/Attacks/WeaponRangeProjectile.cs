@@ -7,13 +7,13 @@ namespace Attacks
 {
     public class WeaponRangeProjectile : RangeProjectile
     {
-        private GameManager _gameManager;
+        private Camera _mainCamera;
         private PlayerInput _playerInput;
 
         [Inject]
-        public void Construct(GameManager gameManager, PlayerInput playerInput)
+        public void Construct(Camera mainCamera, PlayerInput playerInput)
         {
-            _gameManager = gameManager;
+            _mainCamera = mainCamera;
             _playerInput = playerInput;
         }
         
@@ -29,7 +29,7 @@ namespace Attacks
 
         protected override Vector3 GetTargetDirection()
         {
-            return (_gameManager.mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position)
+            return (_mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position)
                 .normalized;
         }
     }
