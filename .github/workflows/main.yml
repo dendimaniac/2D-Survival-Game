@@ -1,0 +1,14 @@
+name: Acquire activation file
+on: [ push ]
+jobs:
+  activation:
+    name: Request manual activation file 🔑
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run all tests
+        uses: webbertakken/unity-test-runner@v1.4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: ./
+          unityVersion: 2019.2.11f1
