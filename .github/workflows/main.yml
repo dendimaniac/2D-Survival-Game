@@ -17,4 +17,7 @@ jobs:
 
       # Run edit mode tests
       - name: Run edit mode tests
-        run: /opt/Unity/Editor/Unity -batchmode -nographics -silent-crashes -logFile -projectPath . -runTests -testResults ./testresults.xml
+        run: /opt/Unity/Editor/Unity -batchmode -nographics -runTests -projectPath ./ -logFile - -testResults ./testresults.xml -testPlatform editmode
+      
+      - name: Show test results
+        run: cat ./testresults.xml
