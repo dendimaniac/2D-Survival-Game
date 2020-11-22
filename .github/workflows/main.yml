@@ -37,5 +37,5 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
-      - name: Show test results
-        run: cat ${{ steps.tests.outputs.artifactsPath }}
+      - name: Show tests results
+        run: cat ${{ steps.tests.outputs.artifactsPath }}/${{ matrix.testMode }}-results.xml
