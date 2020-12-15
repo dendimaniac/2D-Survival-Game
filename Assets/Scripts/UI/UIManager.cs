@@ -17,7 +17,13 @@ namespace UI
         [SerializeField] private float canvasFadeSpeed;
 
         private Button[] _buttonArray;
-        [Inject] private readonly SignalBus _signalBus;
+        private SignalBus _signalBus;
+
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
 
         private void Awake()
         {

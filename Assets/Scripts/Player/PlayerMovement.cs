@@ -1,5 +1,6 @@
 ﻿using System;
 using Helpers;
+using Interfaces;
 using Signals;
 using UnityEngine;
 using Zenject;
@@ -22,9 +23,15 @@ namespace Player
         private Transform _playerTransform;
         private SpriteRenderer _spriteRenderer;
         private PlayerInput _playerInput;
-        [Inject] private readonly SignalBus _signalBus;
+        private SignalBus _signalBus;
 
         #endregion
+
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
 
         private void Awake()
         {
@@ -38,9 +45,9 @@ namespace Player
 
         private void FixedUpdate()
         {
-            CheckFlip(_playerInput.h);
-            Move(_playerInput.h, _playerInput.v);
-            Rotate(_playerInput.rotateDirection);
+            CheckFlip(_playerInput.HorizontalMovement);
+            Move(_playerInput.HorizontalMovement, _playerInput.VerticalMovement);
+            Rotate(_playerInput.RotateDirection);
         }
 
         private void CheckFlip(float h)

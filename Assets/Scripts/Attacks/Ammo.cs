@@ -55,12 +55,6 @@ namespace Attacks
             CurrentAmmo--;
             OnAmmoChanged?.Invoke(this);
         }
-        
-        public void ReduceCurrentAmmo(int reduceAmount)
-        {
-            CurrentAmmo -= reduceAmount;
-            OnAmmoChanged?.Invoke(this);
-        }
 
         private void ReduceCurrentMaxAmmo(int reduceAmount)
         {

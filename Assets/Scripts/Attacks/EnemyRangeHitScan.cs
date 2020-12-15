@@ -1,4 +1,5 @@
 ﻿using Helpers;
+using Player;
 using UnityEngine;
 using Zenject;
 
@@ -7,18 +8,18 @@ namespace Attacks
     public class EnemyRangeHitScan : RangeHitScan
     {
         private Transform _playerTransform;
-        private GameManager _gameManager;
+        private PlayerInput _playerInput;
 
         [Inject]
-        public void Construct(GameManager gameManager)
+        public void Construct(GameManager gameManager, PlayerInput playerInput)
         {
-            _gameManager = gameManager;
+            _playerInput = playerInput;
         }
 
         protected override void Awake()
         {
             MuzzleTransform = transform;
-            _playerTransform = _gameManager.player.transform;
+            _playerTransform = _playerInput.transform;
         }
 
         protected override void Update()

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3062266272759714355}
   - component: {fileID: 919389917}
   - component: {fileID: 2743321273399120230}
+  - component: {fileID: 2976652229511676985}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -170,10 +171,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  canShoot: 0
-  h: 0
-  v: 0
-  rotateDirection: {x: 0, y: 0}
 --- !u!61 &919389917
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -212,6 +209,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6692384a559649708d968783b76ea22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2976652229511676985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 3062266272759714355}
+  _identifier: 
+  _useSceneContext: 0
+  _context: {fileID: 0}
+  _bindType: 0
 --- !u!1 &476925653
 GameObject:
   m_ObjectHideFlags: 0

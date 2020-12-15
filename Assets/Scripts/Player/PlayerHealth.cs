@@ -14,11 +14,12 @@ namespace Player
         private AttackedAnimatorHandler _animatorHandler;
         private UIManager _uiManager;
         private GameManager _gameManager;
-        [Inject] private readonly SignalBus _signalBus;
+        private SignalBus _signalBus;
 
         [Inject]
-        public void Construct(UIManager uiManager, GameManager gameManager)
+        public void Construct(SignalBus signalBus, UIManager uiManager, GameManager gameManager)
         {
+            _signalBus = signalBus;
             _uiManager = uiManager;
             _gameManager = gameManager;
         }

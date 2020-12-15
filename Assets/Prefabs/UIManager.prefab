@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3520628470801246460}
   - component: {fileID: 3520628470801246461}
+  - component: {fileID: 8188305604373040805}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -43,5 +44,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db6c33af05940ff81a997b895bb707b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasFadeSpeed: 1
   loseMenuCanvas: {fileID: 0}
+  highScoreText: {fileID: 0}
+  losingReasonText: {fileID: 0}
+  canvasFadeSpeed: 1
+--- !u!114 &8188305604373040805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3520628470801246463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 3520628470801246461}
+  _identifier: 
+  _useSceneContext: 0
+  _context: {fileID: 0}
+  _bindType: 0

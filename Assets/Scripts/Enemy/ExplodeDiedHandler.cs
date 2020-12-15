@@ -24,7 +24,6 @@ namespace Enemy
 
         public override void Die()
         {
-            base.Die();
             _animator.SetBool(AnimDieParam, true);
             GetComponent<AIPath>().enabled = false;
             StartCoroutine(Explode());

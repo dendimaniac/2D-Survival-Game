@@ -20,13 +20,13 @@ namespace Props
         #endregion
 
         private Health _health;
-        private GameManager _gameManager;
+        private Camera _mainCamera;
         private IMemoryPool _memoryPool;
 
         [Inject]
-        public void Construct(GameManager gameManager)
+        public void Construct(Camera mainCamera)
         {
-            _gameManager = gameManager;
+            _mainCamera = mainCamera;
         }
 
         private void OnEnable()
@@ -76,11 +76,11 @@ namespace Props
 
         private void LateUpdate()
         {
-            var worldToScreenPoint = _gameManager.mainCamera
+            var worldToScreenPoint = _mainCamera
                 .WorldToScreenPoint(_health.transform.position + positionOffset * Vector3.up);
             transform.position = worldToScreenPoint;
         }
-        
+
         public void OnDespawned()
         {
             _memoryPool = null;
@@ -105,7 +105,6 @@ namespace Props
 
         public class Factory : PlaceholderFactory<Health, HealthBar>
         {
-            
         }
     }
 }

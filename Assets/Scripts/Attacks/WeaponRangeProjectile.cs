@@ -1,4 +1,5 @@
 ﻿using Helpers;
+using Player;
 using UnityEngine;
 using Zenject;
 
@@ -6,12 +7,14 @@ namespace Attacks
 {
     public class WeaponRangeProjectile : RangeProjectile
     {
-        private GameManager _gameManager;
+        private Camera _mainCamera;
+        private PlayerInput _playerInput;
 
         [Inject]
-        public void Construct(GameManager gameManager)
+        public void Construct(Camera mainCamera, PlayerInput playerInput)
         {
-            _gameManager = gameManager;
+            _mainCamera = mainCamera;
+            _playerInput = playerInput;
         }
         
         protected override void Awake()
@@ -21,12 +24,12 @@ namespace Attacks
 
         protected override bool CantShoot()
         {
-            return !_gameManager.playerInput.canShoot || !(Time.time >= NextTimeToFire);
+            return !_playerInput.CanShoot || !(Time.time >= NextTimeToFire);
         }
 
         protected override Vector3 GetTargetDirection()
         {
-            return (_gameManager.mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position)
+            return (_mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position)
                 .normalized;
         }
     }
