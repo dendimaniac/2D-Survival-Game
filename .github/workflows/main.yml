@@ -38,4 +38,4 @@ jobs:
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
       - name: Show tests results
-        run: cat ${{ steps.tests.outputs.artifactsPath }}/${{ matrix.testMode }}-results.xml
+        run: cat ${{ matrix.testMode }}-artifacts/${{ matrix.testMode }}-results.xml
