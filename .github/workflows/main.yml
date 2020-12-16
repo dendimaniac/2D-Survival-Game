@@ -37,3 +37,5 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
+      - name: Show test results
+        run: ls ./${{ matrix.testMode }}-artifacts/
