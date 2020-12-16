@@ -38,10 +38,4 @@ jobs:
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
       - name: Show test results
-        run: ls ./.github/ -lah
-  showLogs:
-    name: Show testing error logs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Show error logs
-        run: ls /github/workspace/editmode-artifacts/ -lah
+        run: cat ./${{ matrix.testMode }}-artifacts/${{ matrix.testMode }}.log
