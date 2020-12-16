@@ -38,4 +38,4 @@ jobs:
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
       - name: Show test results
-        run: ls ./${{ matrix.testMode }}-artifacts/
+        run: ls ./${{ matrix.testMode }}-artifacts/ -lah
