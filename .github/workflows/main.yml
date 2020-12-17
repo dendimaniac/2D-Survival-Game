@@ -36,7 +36,7 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           testMode: ${{ matrix.testMode }}
-          artifactsPath: ${{ matrix.testMode }}-artifact
+          artifactsPath: ${{ matrix.testMode }}-artifacts
           customParameters: -nographics
       - name: Show test results
         run: cat ./${{ matrix.testMode }}-artifacts/${{ matrix.testMode }}.log
