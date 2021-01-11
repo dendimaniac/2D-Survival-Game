@@ -3,7 +3,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Zenject;
 
-namespace Tests
+namespace EditmodeTests
 {
     [TestFixture]
     public class ScoreTest : ZenjectUnitTestFixture

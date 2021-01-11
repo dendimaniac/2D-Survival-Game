@@ -20,6 +20,7 @@ jobs:
           - 2020.1.13f1
         testMode:
           - editmode
+          - playmode
     steps:
       - uses: actions/checkout@v2
         with:
