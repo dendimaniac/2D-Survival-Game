@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using PickupsTypes;
 using UnityEngine;
+using Zenject;
 
 namespace SpawnersTypes
 {
     [RequireComponent(typeof(Collider2D))]
-    public abstract class PickupsSpawner : Spawner
+    public class PickupsSpawner : Spawner
     {
         [SerializeField] private LayerMask itemBlockingLayer;
 
@@ -12,7 +14,15 @@ namespace SpawnersTypes
         private Collider2D[] _results;
         private Vector2 _spawnPosition;
         private Bounds _spawnAreaBounds;
+        
+        private Pickups.Factory _pickupsFactory;
 
+        [Inject]
+        private void Construct(Pickups.Factory pickupsFactory)
+        {
+            _pickupsFactory = pickupsFactory;
+        }
+        
         private void Awake()
         {
             _spawnArea = GetComponent<Collider2D>();
@@ -38,6 +48,11 @@ namespace SpawnersTypes
 
                 yield return new WaitForSeconds(timeBetweenSpawn);
             }
+        }
+        
+        protected override GameObject RandomObject()
+        {
+            return _pickupsFactory.Create().gameObject;
         }
     }
 }
