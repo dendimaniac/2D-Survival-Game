@@ -1,7 +1,7 @@
 ﻿using Attacks;
 using NUnit.Framework;
 
-namespace Tests
+namespace EditmodeTests
 {
     public class AmmoTest
     {
