@@ -50,7 +50,7 @@ namespace SpawnersTypes
             }
         }
         
-        protected override GameObject RandomObject()
+        private GameObject RandomObject()
         {
             return _pickupsFactory.Create().gameObject;
         }

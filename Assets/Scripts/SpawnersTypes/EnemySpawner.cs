@@ -12,7 +12,7 @@ namespace SpawnersTypes
         private TransformFactory _transformFactory;
 
         [Inject]
-        public void Construct(TransformFactory transformFactory)
+        private void Construct(TransformFactory transformFactory)
         {
             _transformFactory = transformFactory;
         }
@@ -30,7 +30,7 @@ namespace SpawnersTypes
             }
         }
 
-        protected override GameObject RandomObject()
+        private GameObject RandomObject()
         {
             return enemyList[RandomIndex()];
         }
