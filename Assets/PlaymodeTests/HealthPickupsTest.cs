@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using NSubstitute;
 using NUnit.Framework;
 using PickupsTypes;
@@ -101,6 +102,27 @@ namespace PlaymodeTests
             yield return new WaitForFixedUpdate();
             
             _memoryPool.Received(1).Despawn(_healthPickups);
+        }
+        
+        [UnityTest]
+        public IEnumerator Memory_Pool_Is_Null_When_Despawned()
+        {
+            SetupHealthPickups();
+
+            _healthPickups.OnDespawned();
+
+            const BindingFlags privateFieldAccessFlags =
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Default;
+            var memoryPoolsProperty = _healthPickups.GetType().BaseType?.GetField("_memoryPool", privateFieldAccessFlags);
+            if (memoryPoolsProperty == null)
+            {
+                Assert.Fail("Forced failed, might be that _memoryPool field name changed");
+            }
+
+            var memoryPoolValue = memoryPoolsProperty.GetValue(_healthPickups);
+            Assert.IsNull(memoryPoolValue);
+
+            yield break;
         }
 
         private void SetupPlayerGameObject()
