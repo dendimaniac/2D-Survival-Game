@@ -1,6 +1,7 @@
 ﻿using System;
 using Enemy;
 using Helpers;
+using Interfaces;
 using Signals;
 using UnityEngine;
 using Zenject;
@@ -14,9 +15,11 @@ namespace Data
         
         private const string Highscore = "highscore";
         private int _currentScore;
+        
         private readonly SignalBus _signalBus;
-
-        public HitCombo HitCombo { get; }
+        private readonly HitCombo _hitCombo;
+        private readonly IPlayerPrefs _playerPrefs;
+        
         public int CurrentScore
         {
             get => _currentScore;
@@ -27,10 +30,11 @@ namespace Data
             }
         }
 
-        public Score(SignalBus signalBus, HitCombo hitCombo)
+        public Score(SignalBus signalBus, HitCombo hitCombo, IPlayerPrefs playerPrefs)
         {
             _signalBus = signalBus;
-            HitCombo = hitCombo;
+            _hitCombo = hitCombo;
+            _playerPrefs = playerPrefs;
         }
         
         public void Initialize()
@@ -43,25 +47,25 @@ namespace Data
         public void ResetScore()
         {
             CurrentScore = 0;
-            HitCombo.ResetStreak();
+            _hitCombo.ResetStreak();
         }
 
         public void IncreaseScore()
         {
-            HitCombo.IncreaseStreak();
-            CurrentScore += ScoreIncrement * HitCombo.CurrentHitCombo;
+            _hitCombo.IncreaseStreak();
+            CurrentScore += ScoreIncrement * _hitCombo.CurrentHitCombo;
         }
 
         private void SaveScore()
         {
-            var currentHighScore = PlayerPrefs.GetInt(Highscore);
+            var currentHighScore = _playerPrefs.GetInt(Highscore);
             if (currentHighScore >= CurrentScore) return;
-            PlayerPrefs.SetInt(Highscore, CurrentScore);
+            _playerPrefs.SetInt(Highscore, CurrentScore);
         }
 
-        public static int LoadHighScore()
+        public int LoadHighScore()
         {
-            return PlayerPrefs.GetInt(Highscore);
+            return _playerPrefs.GetInt(Highscore);
         }
 
         public void Dispose()
