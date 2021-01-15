@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using NSubstitute;
 using NUnit.Framework;
 using PickupsTypes;
@@ -91,7 +92,7 @@ namespace PlaymodeTests
 
             Assert.IsTrue(ammoRefillAmount > 0f);
         }
-        
+
         [UnityTest]
         public IEnumerator
             Ammo_Pickups_Is_Despawned_When_Game_Object_With_Player_Tag_Triggers_With_Ammo_Pickups()
@@ -99,8 +100,29 @@ namespace PlaymodeTests
             SetupAmmoPickups();
 
             yield return new WaitForFixedUpdate();
-            
+
             _memoryPool.Received(1).Despawn(_ammoPickups);
+        }
+
+        [UnityTest]
+        public IEnumerator Memory_Pool_Is_Null_When_Despawned()
+        {
+            SetupAmmoPickups();
+
+            _ammoPickups.OnDespawned();
+
+            const BindingFlags privateFieldAccessFlags =
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Default;
+            var memoryPoolsProperty = _ammoPickups.GetType().BaseType?.GetField("_memoryPool", privateFieldAccessFlags);
+            if (memoryPoolsProperty == null)
+            {
+                Assert.Fail("Forced failed, might be that _memoryPool field name changed");
+            }
+
+            var memoryPoolValue = memoryPoolsProperty.GetValue(_ammoPickups);
+            Assert.IsNull(memoryPoolValue);
+
+            yield break;
         }
 
         private void SetupPlayerGameObject()
