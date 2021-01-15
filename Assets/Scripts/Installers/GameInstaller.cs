@@ -1,4 +1,5 @@
 using Data;
+using Interfaces;
 using Signals;
 using Zenject;
 
@@ -14,6 +15,8 @@ namespace Installers
 
             Container.BindInterfacesAndSelfTo<Score>().AsSingle();
             Container.Bind<HitCombo>().AsSingle();
+
+            Container.Bind<IPlayerPrefs>().To<CustomPlayerPrefs>().FromInstance(new CustomPlayerPrefs()).AsSingle();
         }
     }
 }

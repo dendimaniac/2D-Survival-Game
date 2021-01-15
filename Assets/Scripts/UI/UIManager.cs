@@ -18,11 +18,13 @@ namespace UI
 
         private Button[] _buttonArray;
         private SignalBus _signalBus;
+        private Score _score;
 
         [Inject]
-        private void Construct(SignalBus signalBus)
+        private void Construct(SignalBus signalBus, Score score)
         {
             _signalBus = signalBus;
+            _score = score;
         }
 
         private void Awake()
@@ -46,7 +48,7 @@ namespace UI
 
         private IEnumerator FadeLoseMenu()
         {
-            highScoreText.text = Score.LoadHighScore().ToString();
+            highScoreText.text = _score.LoadHighScore().ToString();
             while (loseMenuCanvas.alpha < 1)
             {
                 loseMenuCanvas.alpha += Time.unscaledDeltaTime * canvasFadeSpeed;

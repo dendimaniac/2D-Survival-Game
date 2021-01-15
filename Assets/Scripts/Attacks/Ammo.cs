@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Attacks
 {
-    public class Ammo
+    public class Ammo : IDisposable
     {
         public static event Action<Ammo> OnAmmoChanged;
 
@@ -80,6 +80,11 @@ namespace Attacks
         private int GetReloadAmount()
         {
             return CurrentMaxAmmo <= (_maxAmmoPerClip - CurrentAmmo) ? CurrentMaxAmmo : (_maxAmmoPerClip - CurrentAmmo);
+        }
+
+        public void Dispose()
+        {
+            AmmoPickups.OnAmmoPickedUp -= RefillAmmo;
         }
     }
 }
