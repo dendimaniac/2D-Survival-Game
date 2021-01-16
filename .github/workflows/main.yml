@@ -19,7 +19,7 @@ jobs:
         unityVersion:
           - 2020.1.13f1
         testMode:
-          - editmode
+#          - editmode
           - playmode
     steps:
       - uses: actions/checkout@v2
@@ -32,4 +32,4 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
-          customParameters: -nographics
+#          customParameters: -nographics
