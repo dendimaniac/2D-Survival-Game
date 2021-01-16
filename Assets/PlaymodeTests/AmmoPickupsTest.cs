@@ -34,6 +34,23 @@ namespace PlaymodeTests
 
             SkipInstall();
         }
+        
+        private void SetupPlayerGameObject()
+        {
+            _playerGameObject = new GameObject {tag = "Player"};
+            _playerGameObject.AddComponent<Rigidbody2D>();
+            _playerGameObject.AddComponent<BoxCollider2D>();
+        }
+
+        private void SetupAmmoPickupsGameObject()
+        {
+            _ammoPickupsGameObject = new GameObject();
+            _ammoPickupsBoxCollider = _ammoPickupsGameObject.AddComponent<BoxCollider2D>();
+            _ammoPickupsBoxCollider.isTrigger = true;
+            _ammoPickups = _ammoPickupsGameObject.AddComponent<AmmoPickups>();
+            _memoryPool = Substitute.For<IMemoryPool>();
+            _ammoPickups.OnSpawned(_memoryPool);
+        }
 
         [UnityTest]
         public IEnumerator
@@ -123,23 +140,6 @@ namespace PlaymodeTests
             Assert.IsNull(memoryPoolValue);
 
             yield break;
-        }
-
-        private void SetupPlayerGameObject()
-        {
-            _playerGameObject = new GameObject {tag = "Player"};
-            _playerGameObject.AddComponent<Rigidbody2D>();
-            _playerGameObject.AddComponent<BoxCollider2D>();
-        }
-
-        private void SetupAmmoPickupsGameObject()
-        {
-            _ammoPickupsGameObject = new GameObject();
-            _ammoPickupsBoxCollider = _ammoPickupsGameObject.AddComponent<BoxCollider2D>();
-            _ammoPickupsBoxCollider.isTrigger = true;
-            _ammoPickups = _ammoPickupsGameObject.AddComponent<AmmoPickups>();
-            _memoryPool = Substitute.For<IMemoryPool>();
-            _ammoPickups.OnSpawned(_memoryPool);
         }
     }
 }
