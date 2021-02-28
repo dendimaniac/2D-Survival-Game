@@ -9,6 +9,7 @@ using Zenject;
 
 namespace Player
 {
+    [RequireComponent(typeof(AttackedAnimatorHandler))]
     public class PlayerHealth : Health, IHealable
     {
         private AttackedAnimatorHandler _animatorHandler;

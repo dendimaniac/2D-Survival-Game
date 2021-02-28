@@ -11,7 +11,8 @@ namespace SpawnersTypes
         [SerializeField] private LayerMask itemBlockingLayer;
 
         private Collider2D _spawnArea;
-        private Collider2D[] _results;
+        private readonly Collider2D[] _results = new Collider2D[2];
+        private int _resultAmount;
         private Vector2 _spawnPosition;
         private Bounds _spawnAreaBounds;
         
@@ -35,12 +36,11 @@ namespace SpawnersTypes
             {
                 do
                 {
-                    _results = new Collider2D[2];
                     var randomXPosition = Random.Range(_spawnAreaBounds.min.x, _spawnAreaBounds.max.x);
                     var randomYPosition = Random.Range(_spawnAreaBounds.min.y, _spawnAreaBounds.max.y);
                     _spawnPosition = new Vector2(randomXPosition, randomYPosition);
-                    Physics2D.OverlapBoxNonAlloc(_spawnPosition, Vector2.one, 0, _results, itemBlockingLayer);
-                } while (!_spawnArea.OverlapPoint(_spawnPosition) || _results[0]);
+                    _resultAmount = Physics2D.OverlapBoxNonAlloc(_spawnPosition, Vector2.one, 0, _results, itemBlockingLayer);
+                } while (!_spawnArea.OverlapPoint(_spawnPosition) || _resultAmount > 0);
 
                 var pickupToSpawn = RandomObject();
                 pickupToSpawn.transform.position = _spawnPosition;
