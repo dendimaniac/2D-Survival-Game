@@ -17,7 +17,15 @@ namespace UI
         [SerializeField] private float canvasFadeSpeed;
 
         private Button[] _buttonArray;
-        [Inject] private readonly SignalBus _signalBus;
+        private SignalBus _signalBus;
+        private Score _score;
+
+        [Inject]
+        private void Construct(SignalBus signalBus, Score score)
+        {
+            _signalBus = signalBus;
+            _score = score;
+        }
 
         private void Awake()
         {
@@ -40,7 +48,7 @@ namespace UI
 
         private IEnumerator FadeLoseMenu()
         {
-            highScoreText.text = Score.LoadHighScore().ToString();
+            highScoreText.text = _score.LoadHighScore().ToString();
             while (loseMenuCanvas.alpha < 1)
             {
                 loseMenuCanvas.alpha += Time.unscaledDeltaTime * canvasFadeSpeed;

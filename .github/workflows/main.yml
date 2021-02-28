@@ -1,0 +1,34 @@
+name: Test project
+
+on:
+  pull_request: { }
+  push: { branches: [ development ] }
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  testAllModes:
+    name: Test in ${{ matrix.testMode }} on version ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - .
+        unityVersion:
+          - 2020.1.13f1
+        testMode:
+          - editmode
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: game-ci/unity-test-runner@v2.0-alpha-1
+        id: tests
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          customParameters: -nographics

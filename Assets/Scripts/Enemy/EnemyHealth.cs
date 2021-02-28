@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Enemy
 {
+    [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(IAudioHandler))]
     [RequireComponent(typeof(AttackedAnimatorHandler))]
     [RequireComponent(typeof(DiedHandler))]

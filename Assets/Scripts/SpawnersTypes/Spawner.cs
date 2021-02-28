@@ -7,13 +7,11 @@ namespace SpawnersTypes
     {
         [SerializeField] protected float timeBetweenSpawn;
 
-        protected void Start()
+        private void Start()
         {
             StartCoroutine(Spawn());
         }
 
         protected abstract IEnumerator Spawn();
-
-        protected abstract GameObject RandomObject();
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Props
 {
-    [RequireComponent(typeof(Animator))]
     public abstract class Health : MonoBehaviour, IDamageable
     {
         public static event Action<Health> OnHealthAdded;

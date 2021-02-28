@@ -1,11 +1,10 @@
 ﻿using System;
-using Data;
 using PickupsTypes;
 using UnityEngine;
 
 namespace Attacks
 {
-    public class Ammo
+    public class Ammo : IDisposable
     {
         public static event Action<Ammo> OnAmmoChanged;
 
@@ -34,8 +33,8 @@ namespace Attacks
         {
             AmmoPickups.OnAmmoPickedUp += RefillAmmo;
 
-            this._maxAmmo = maxAmmo;
-            this._maxAmmoPerClip = maxAmmoPerClip;
+            _maxAmmo = maxAmmo;
+            _maxAmmoPerClip = maxAmmoPerClip;
             CurrentMaxAmmo = maxAmmo;
             CurrentAmmo = maxAmmoPerClip;
             OnAmmoChanged?.Invoke(this);
@@ -53,12 +52,6 @@ namespace Attacks
         public void ReduceCurrentAmmo()
         {
             CurrentAmmo--;
-            OnAmmoChanged?.Invoke(this);
-        }
-        
-        public void ReduceCurrentAmmo(int reduceAmount)
-        {
-            CurrentAmmo -= reduceAmount;
             OnAmmoChanged?.Invoke(this);
         }
 
@@ -86,6 +79,11 @@ namespace Attacks
         private int GetReloadAmount()
         {
             return CurrentMaxAmmo <= (_maxAmmoPerClip - CurrentAmmo) ? CurrentMaxAmmo : (_maxAmmoPerClip - CurrentAmmo);
+        }
+
+        public void Dispose()
+        {
+            AmmoPickups.OnAmmoPickedUp -= RefillAmmo;
         }
     }
 }
