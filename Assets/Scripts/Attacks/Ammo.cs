@@ -49,9 +49,9 @@ namespace Attacks
             OnAmmoChanged?.Invoke(this);
         }
 
-        public void ReduceCurrentAmmo()
+        public void ReduceCurrentAmmo(int amount = 1)
         {
-            CurrentAmmo--;
+            CurrentAmmo -= amount;
             OnAmmoChanged?.Invoke(this);
         }
 
@@ -78,7 +78,7 @@ namespace Attacks
 
         private int GetReloadAmount()
         {
-            return CurrentMaxAmmo <= (_maxAmmoPerClip - CurrentAmmo) ? CurrentMaxAmmo : (_maxAmmoPerClip - CurrentAmmo);
+            return CurrentMaxAmmo <= _maxAmmoPerClip - CurrentAmmo ? CurrentMaxAmmo : _maxAmmoPerClip - CurrentAmmo;
         }
 
         public void Dispose()
