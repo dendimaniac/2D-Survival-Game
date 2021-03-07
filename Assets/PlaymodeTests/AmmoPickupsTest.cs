@@ -38,23 +38,27 @@ namespace PlaymodeTests
         private void SetupPlayerGameObject()
         {
             _playerGameObject = new GameObject {tag = "Player"};
+            
             _playerGameObject.AddComponent<Rigidbody2D>();
             _playerGameObject.AddComponent<BoxCollider2D>();
         }
 
         private void SetupAmmoPickupsGameObject()
         {
-            _ammoPickupsGameObject = new GameObject();
+            _ammoPickupsGameObject = new GameObject("AmmoPickups");
+            
             _ammoPickupsBoxCollider = _ammoPickupsGameObject.AddComponent<BoxCollider2D>();
             _ammoPickupsBoxCollider.isTrigger = true;
+            
             _ammoPickups = _ammoPickupsGameObject.AddComponent<AmmoPickups>();
+            
             _memoryPool = Substitute.For<IMemoryPool>();
             _ammoPickups.OnSpawned(_memoryPool);
         }
 
         [UnityTest]
         public IEnumerator
-            Picked_Up_Event_Should_Invoke_When_Game_Object_With_Player_Tag_Triggers_With_Ammo_Pickups()
+            OnAmmoPickedUpEvent_GameObjectWithPlayerTagCollideTriggerWithAmmoPickups_IsRaised()
         {
             SetupAmmoPickups();
 
@@ -68,14 +72,15 @@ namespace PlaymodeTests
 
         [UnityTest]
         public IEnumerator
-            Picked_Up_Event_Should_Not_Invoke_When_Game_Object_Without_Player_Tag_Triggers_With_Ammo_Pickups()
+            OnAmmoPickedUpEvent_GameObjectWithNotPlayerTagCollideTriggerWithAmmoPickups_IsNotRaised()
         {
             SetupAmmoPickups();
 
-            _playerGameObject.tag = "Untagged";
             var eventRaised = false;
             AmmoPickups.OnAmmoPickedUp += _ => { eventRaised = true; };
 
+            _playerGameObject.tag = "Untagged";
+            
             yield return new WaitForFixedUpdate();
 
             Assert.IsFalse(eventRaised);
@@ -83,7 +88,7 @@ namespace PlaymodeTests
 
         [UnityTest]
         public IEnumerator
-            Picked_Up_Event_Should_Not_Invoke_When_Game_Object_With_Player_Tag_Collides_With_Ammo_Pickups()
+            OnAmmoPickedUpEvent_GameObjectWithPlayerTagCollideWithAmmoPickups_IsNotRaised()
         {
             SetupAmmoPickups();
 
@@ -98,7 +103,7 @@ namespace PlaymodeTests
 
         [UnityTest]
         public IEnumerator
-            Picked_Up_Event_Should_Invoke_With_Ammo_Amount_When_Game_Object_With_Player_Tag_Triggers_With_Ammo_Pickups()
+            OnAmmoPickedUpEvent_GameObjectWithPlayerTagCollideTriggerWithAmmoPickups_IsRaisedWithAmmoRefillAmount()
         {
             SetupAmmoPickups();
 
@@ -112,7 +117,7 @@ namespace PlaymodeTests
 
         [UnityTest]
         public IEnumerator
-            Ammo_Pickups_Is_Despawned_When_Game_Object_With_Player_Tag_Triggers_With_Ammo_Pickups()
+            MemoryPoolDespawn_GameObjectWithPlayerTagCollideTriggerWithAmmoPickups_IsCalledWithAmmoPickupsInstance()
         {
             SetupAmmoPickups();
 
@@ -122,7 +127,7 @@ namespace PlaymodeTests
         }
 
         [UnityTest]
-        public IEnumerator Memory_Pool_Is_Null_When_Despawned()
+        public IEnumerator OnDespawned_MemoryPoolReturnsNull()
         {
             SetupAmmoPickups();
 
