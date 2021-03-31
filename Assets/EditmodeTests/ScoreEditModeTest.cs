@@ -11,17 +11,20 @@ namespace EditmodeTests
     {
         [Inject]
         private Score _score;
-
         private IPlayerPrefs _fakePlayerPrefs;
 
         private void CommonInstall()
         {
             SignalBusInstaller.Install(Container);
+            
             Container.Bind<Score>().AsSingle();
+            
             var fakeHitCombo = Substitute.For<HitCombo>();
             Container.Bind<HitCombo>().FromInstance(fakeHitCombo).AsSingle();
+            
             _fakePlayerPrefs = Substitute.For<IPlayerPrefs>();
             Container.Bind<IPlayerPrefs>().FromInstance(_fakePlayerPrefs).AsSingle();
+            
             Container.Inject(this);
         }
         
@@ -34,7 +37,7 @@ namespace EditmodeTests
         }
 
         [Test]
-        public void ResetScore_Should_Set_The_Score_To_0()
+        public void ResetScore_CurrentScoreReturnsZero()
         {
             _score.ResetScore();
             
@@ -42,18 +45,16 @@ namespace EditmodeTests
         }
 
         [Test]
-        public void IncreaseScore_Should_Increase_Score_By_Increment_Amount()
+        public void IncreaseScore_CalledOneTime_IncreaseCurrentScoreByBaseIncrementAmount()
         {
-            _score.ResetScore();
             _score.IncreaseScore();
             
             Assert.AreEqual(_score.ScoreIncrement, _score.CurrentScore);
         }
         
         [Test]
-        public void IncreaseScore_Twice_Should_Increase_Score_By_Increment_Amount_Times_Three()
+        public void IncreaseScore_CalledTwoTimes_IncreaseCurrentScoreByThreeTimesIncrementAmount()
         {
-            _score.ResetScore();
             _score.IncreaseScore();
             _score.IncreaseScore();
             
@@ -61,7 +62,7 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Score_Changed_Event_Invoked_When_Increase_Score()
+        public void OnScoreChangedEvent_IncreaseScoreCalled_IsRaised()
         {
             var hasChangedScore = false;
             Score.OnScoreChanged += _ =>
@@ -75,7 +76,7 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Score_Changed_Event_With_Score_Amount_Invoked_When_Increase_Score()
+        public void OnScoreChangedEvent_IncreaseScoreCalled_IsRaisedWithNewScore()
         {
             var initialScore = _score.CurrentScore;
             var newScore = 0;
@@ -90,7 +91,7 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Score_Changed_Event_Invoked_When_Reset_Score()
+        public void OnScoreChangedEvent_ResetScoreCalled_IsRaised()
         {
             var hasChangedScore = false;
             Score.OnScoreChanged += _ =>
@@ -104,7 +105,7 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Score_Changed_Event_Invoked_With_Score_Amount_When_Reset_Score()
+        public void OnScoreChangedEvent_ResetScoreCalled_IsRaisedWithNewScore()
         {
             var initialScore = _score.CurrentScore;
             var newScore = 0;
@@ -119,17 +120,11 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Load_High_Score_Loads_From_Player_Prefs()
+        public void LoadHighScore_ReturnsScoreFromPlayerPrefs()
         {
-            _fakePlayerPrefs.GetInt(Arg.Any<string>()).Returns(0);
-
-            var savedHighScore = _score.LoadHighScore();
-            
-            Assert.AreEqual(0, savedHighScore);
-            
             _fakePlayerPrefs.GetInt(Arg.Any<string>()).Returns(10);
             
-            savedHighScore = _score.LoadHighScore();
+            var savedHighScore = _score.LoadHighScore();
             
             Assert.AreEqual(10, savedHighScore);
         }
