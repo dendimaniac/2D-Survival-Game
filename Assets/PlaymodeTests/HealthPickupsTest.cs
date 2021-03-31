@@ -36,8 +36,7 @@ namespace PlaymodeTests
         }
 
         [UnityTest]
-        public IEnumerator
-            Picked_Up_Event_Should_Invoke_When_Game_Object_With_Player_Tag_Triggers_With_Health_Pickups()
+        public IEnumerator OnHealthPickedUpEvent_GameObjectWithPlayerTagTriggers_IsRaised()
         {
             SetupHealthPickups();
 
@@ -50,8 +49,7 @@ namespace PlaymodeTests
         }
 
         [UnityTest]
-        public IEnumerator
-            Picked_Up_Event_Should_Not_Invoke_When_Game_Object_Without_Player_Tag_Triggers_With_Health_Pickups()
+        public IEnumerator OnHealthPickedUpEvent_GameObjectWithoutPlayerTagTriggers_NotRaised()
         {
             SetupHealthPickups();
 
@@ -65,8 +63,7 @@ namespace PlaymodeTests
         }
 
         [UnityTest]
-        public IEnumerator
-            Picked_Up_Event_Should_Not_Invoke_When_Game_Object_With_Player_Tag_Collides_With_Health_Pickups()
+        public IEnumerator OnHealthPickedUpEvent_GameObjectWithPlayerTagCollides_NotRaised()
         {
             SetupHealthPickups();
 
@@ -78,10 +75,9 @@ namespace PlaymodeTests
 
             Assert.IsFalse(eventRaised);
         }
-
+        
         [UnityTest]
-        public IEnumerator
-            Picked_Up_Event_Should_Invoke_With_Heal_Amount_When_Game_Object_With_Player_Tag_Triggers_With_Health_Pickups()
+        public IEnumerator OnHealthPickedUpEvent_GameObjectWithPlayerTagTriggers_RaisedWithHealAmount()
         {
             SetupHealthPickups();
 
@@ -94,18 +90,17 @@ namespace PlaymodeTests
         }
         
         [UnityTest]
-        public IEnumerator
-            Health_Pickups_Is_Despawned_When_Game_Object_With_Player_Tag_Triggers_With_Health_Pickups()
+        public IEnumerator Despawn_GameObjectWithPlayerTagTriggers_IsCalled()
         {
             SetupHealthPickups();
 
             yield return new WaitForFixedUpdate();
-            
+
             _memoryPool.Received(1).Despawn(_healthPickups);
         }
         
         [UnityTest]
-        public IEnumerator Memory_Pool_Is_Null_When_Despawned()
+        public IEnumerator MemoryPool_DespawnCalled_ReturnsNull()
         {
             SetupHealthPickups();
 
@@ -113,7 +108,8 @@ namespace PlaymodeTests
 
             const BindingFlags privateFieldAccessFlags =
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Default;
-            var memoryPoolsProperty = _healthPickups.GetType().BaseType?.GetField("_memoryPool", privateFieldAccessFlags);
+            var memoryPoolsProperty =
+                _healthPickups.GetType().BaseType?.GetField("_memoryPool", privateFieldAccessFlags);
             if (memoryPoolsProperty == null)
             {
                 Assert.Fail("Forced failed, might be that _memoryPool field name changed");
