@@ -59,7 +59,7 @@ namespace PlaymodeTests
             enemyListField.SetValue(_enemySpawner, enemyList);
         }
 
-        private static TestComponent[] GetOnlySpawnedEnemies()
+        private static TestComponent[] GetSpawnedEnemies()
         {
             var allTestEnemies = Object.FindObjectsOfType<TestComponent>();
             return allTestEnemies
@@ -68,20 +68,20 @@ namespace PlaymodeTests
         }
 
         [UnityTest]
-        public IEnumerator Spawn_Only_One_Enemy_When_Only_One_Item_In_Enemy_List()
+        public IEnumerator Spawn_OneElementInEnemyList_SpawnOnlyOneEnemy()
         {
             CommonInstall(1);
 
             yield return null;
 
             var testEnemySpawned = Object.FindObjectOfType<TestComponent>();
-            var enemiesSpawned = GetOnlySpawnedEnemies();
+            var enemiesSpawned = GetSpawnedEnemies();
             Assert.NotNull(testEnemySpawned);
             Assert.AreEqual(1, enemiesSpawned.Length);
         }
 
         [UnityTest]
-        public IEnumerator Spawn_One_Random_Enemy_When_Enemy_List_Length_Larger_Than_One()
+        public IEnumerator Spawn_LargerThanOneElementInEnemyList_SpawnRandomEnemy()
         {
             CommonInstall(2);
 
@@ -89,7 +89,7 @@ namespace PlaymodeTests
 
             var testEnemySpawned = Object.FindObjectOfType<TestComponent>();
             var spawnedEnemyName = testEnemySpawned.gameObject.name;
-            var enemiesSpawned = GetOnlySpawnedEnemies();
+            var enemiesSpawned = GetSpawnedEnemies();
             Debug.Log(spawnedEnemyName);
 
             Assert.NotNull(testEnemySpawned);
@@ -98,7 +98,7 @@ namespace PlaymodeTests
         }
 
         [UnityTest]
-        public IEnumerator Spawn_Another_Random_Enemy_After_Certain_Time()
+        public IEnumerator Spawn_AfterCertainTime_SpawnAnotherEnemy()
         {
             CommonInstall(1);
 
@@ -114,14 +114,14 @@ namespace PlaymodeTests
             yield return null;
 
             var testEnemySpawned = Object.FindObjectOfType<TestComponent>();
-            var enemiesSpawned = GetOnlySpawnedEnemies();
+            var enemiesSpawned = GetSpawnedEnemies();
 
             Assert.NotNull(testEnemySpawned);
             Assert.AreEqual(1, enemiesSpawned.Length);
 
             yield return new WaitForSeconds((float) timeBetweenSpawnValue);
 
-            enemiesSpawned = GetOnlySpawnedEnemies();
+            enemiesSpawned = GetSpawnedEnemies();
             Assert.AreEqual(2, enemiesSpawned.Length);
         }
 

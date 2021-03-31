@@ -55,49 +55,20 @@ namespace PlaymodeTests
             _memoryPool = Substitute.For<IMemoryPool>();
             _ammoPickups.OnSpawned(_memoryPool);
         }
-    
-        private void ReduceCurrentAmmo(Ammo ammo, int reduceAmount)
-        {
-            for (var i = 0; i < reduceAmount; i++)
-            {
-                ammo.ReduceCurrentAmmo();
-            }
-        }
-    
+
         [UnityTest]
-        public IEnumerator Max_Ammo_Is_Refilled_On_Ammo_Picked_Up()
+        public IEnumerator OnAmmoPickedUpEvent_CurrentMaxAmmoRefilledByPickupRefillAmount()
         {
             SetupAmmoPickups();
 
             const int maxAmmo = 30;
             const int maxAmmoPerClip = 10;
             var ammo = new Ammo(maxAmmo, maxAmmoPerClip);
-            ReduceCurrentAmmo(ammo, maxAmmoPerClip);
+            ammo.ReduceCurrentAmmo(maxAmmoPerClip);
             ammo.Reload();
-            var reloadedCurrentAmmo = ammo.CurrentAmmo;
-        
-            Assert.AreEqual(maxAmmo - maxAmmoPerClip, ammo.CurrentMaxAmmo);
-            Assert.AreEqual(maxAmmoPerClip, reloadedCurrentAmmo);
-
-            yield return new WaitForFixedUpdate();
-        
-            Assert.AreEqual(maxAmmo, ammo.CurrentMaxAmmo);
-            Assert.AreEqual(maxAmmoPerClip, reloadedCurrentAmmo);
-        }
-        
-        [UnityTest]
-        public IEnumerator Max_Ammo_Is_Refilled_By_Pickup_Amount_On_Ammo_Picked_Up()
-        {
-            SetupAmmoPickups();
-
-            const int maxAmmo = 30;
-            const int maxAmmoPerClip = 10;
-            var ammo = new Ammo(maxAmmo, maxAmmoPerClip);
-            ReduceCurrentAmmo(ammo, maxAmmoPerClip);
+            ammo.ReduceCurrentAmmo(maxAmmoPerClip);
             ammo.Reload();
-            ReduceCurrentAmmo(ammo, maxAmmoPerClip);
-            ammo.Reload();
-            ReduceCurrentAmmo(ammo, maxAmmoPerClip);
+            ammo.ReduceCurrentAmmo(maxAmmoPerClip);
             ammo.Reload();
             var reloadedCurrentAmmo = ammo.CurrentAmmo;
         
@@ -116,33 +87,33 @@ namespace PlaymodeTests
         }
         
         [UnityTest]
-        public IEnumerator Ammo_Changed_Event_Invoked_On_Ammo_Picked_Up()
+        public IEnumerator OnAmmoPickedUpEvent_RaiseOnAmmoChangeEvent()
         {
             SetupAmmoPickups();
 
             const int maxAmmo = 30;
             const int maxAmmoPerClip = 10;
             var ammo = new Ammo(maxAmmo, maxAmmoPerClip);
-            ReduceCurrentAmmo(ammo, maxAmmoPerClip);
+            ammo.ReduceCurrentAmmo(maxAmmoPerClip);
             ammo.Reload();
 
             var eventRaised = false;
-            AmmoPickups.OnAmmoPickedUp += _ => { eventRaised = true; };
+            Ammo.OnAmmoChanged += _ => { eventRaised = true; };
 
             yield return new WaitForFixedUpdate();
             
             Assert.IsTrue(eventRaised);
         }
-        
+
         [UnityTest]
-        public IEnumerator Ammo_Dont_Refill_On_Ammo_Picked_Up_After_Disposed()
+        public IEnumerator OnAmmoPickedUpEvent_AmmoDisposed_DontRefillAmmo()
         {
             SetupAmmoPickups();
 
             const int maxAmmo = 30;
             const int maxAmmoPerClip = 10;
             var ammo = new Ammo(maxAmmo, maxAmmoPerClip);
-            ReduceCurrentAmmo(ammo, maxAmmoPerClip);
+            ammo.ReduceCurrentAmmo(maxAmmoPerClip);
             ammo.Reload();
             var reloadedCurrentAmmo = ammo.CurrentAmmo;
         

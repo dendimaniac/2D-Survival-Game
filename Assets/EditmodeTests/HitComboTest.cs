@@ -1,4 +1,5 @@
 using Data;
+using NSubstitute;
 using NUnit.Framework;
 using Zenject;
 
@@ -15,31 +16,36 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Current_Hit_Combo_Is_Zero_For_New_Instance()
+        public void CurrentHitCombo_NewInstance_ReturnsZero()
         {
             Assert.AreEqual(0, _hitCombo.CurrentHitCombo);
         }
         
         [Test]
-        public void Current_Hit_Combo_Is_Increased_By_One_When_Call_Increase_Streak()
+        public void IncreaseStreak_CurrentHitComboIncreasedByOne()
         {
-            int initialHitCombo = _hitCombo.CurrentHitCombo;
+            var initialHitCombo = _hitCombo.CurrentHitCombo;
             
             _hitCombo.IncreaseStreak();
             
-            Assert.IsTrue(_hitCombo.CurrentHitCombo > initialHitCombo);
+            Assert.AreEqual(initialHitCombo + 1, _hitCombo.CurrentHitCombo);
         }
         
         [Test]
-        public void Current_Hit_Combo_Is_Reset_To_Zero_When_Call_Reset_Streak()
+        public void ResetStreak_CurrentHitComboReturnsZero()
         {
+            var initialHitCombo = _hitCombo.CurrentHitCombo;
+            _hitCombo.IncreaseStreak();
+            
+            Assert.IsTrue(_hitCombo.CurrentHitCombo > initialHitCombo);
+
             _hitCombo.ResetStreak();
             
             Assert.AreEqual(0, _hitCombo.CurrentHitCombo);
         }
         
         [Test]
-        public void Hit_Combo_Changed_Event_Is_Invoked_When_Call_Increase_Streak()
+        public void OnHitComboChangedEvent_IncreaseStreakCalled_IsRaised()
         {
             var hasChangedCombo = false;
             HitCombo.OnHitComboChanged += _ =>
@@ -53,7 +59,7 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Hit_Combo_Changed_Event_Is_Invoked_With_Hit_Combo_Amount_When_Call_Increase_Streak()
+        public void OnHitComboChangedEvent_IncreaseStreakCalled_IsRaisedWithCurrentHitCombo()
         {
             var newHitCombo = 0;
             HitCombo.OnHitComboChanged += currentHitCombo =>
@@ -67,7 +73,7 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Hit_Combo_Changed_Event_Is_Invoked_When_Call_Reset_Streak()
+        public void OnHitComboChangedEvent_ResetStreakCalled_IsRaised()
         {
             var hasChangedCombo = false;
             HitCombo.OnHitComboChanged += _ =>
@@ -81,8 +87,13 @@ namespace EditmodeTests
         }
         
         [Test]
-        public void Hit_Combo_Changed_Event_Is_Invoked_With_Hit_Combo_Amount_When_Call_Reset_Streak()
+        public void OnHitComboChangedEvent_ResetStreakCalled_IsRaisedWithCurrentHitCombo()
         {
+            var initialHitCombo = _hitCombo.CurrentHitCombo;
+            _hitCombo.IncreaseStreak();
+            
+            Assert.IsTrue(_hitCombo.CurrentHitCombo > initialHitCombo);
+            
             var newHitCombo = 0;
             HitCombo.OnHitComboChanged += currentHitCombo =>
             {
