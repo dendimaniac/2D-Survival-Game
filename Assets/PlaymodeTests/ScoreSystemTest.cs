@@ -18,8 +18,6 @@ namespace PlaymodeTests
 
         private void CommonInstall()
         {
-            // Setup initial state by creating game objects from scratch, loading prefabs/scenes, etc
-
             PreInstall();
 
             SignalBusInstaller.Install(Container);
@@ -34,9 +32,9 @@ namespace PlaymodeTests
 
             PostInstall();
         }
-
+        
         [UnityTest]
-        public IEnumerator Current_Score_And_Hit_Combo_Is_Zero_On_Start()
+        public IEnumerator CurrentScoreAndHitCombo_OnStart_ReturnsZero()
         {
             CommonInstall();
 
@@ -44,21 +42,19 @@ namespace PlaymodeTests
             Assert.AreEqual(0, _fakeHitCombo.CurrentHitCombo);
             yield break;
         }
-
+        
         [UnityTest]
-        public IEnumerator Current_Score_And_Hit_Combo_Is_Reset_To_Zero_On_Start()
+        public IEnumerator HitComboResetStreak_OnStart_IsCalled()
         {
             CommonInstall();
-
-            Assert.AreEqual(0, _score.CurrentScore);
+            
             _fakeHitCombo.Received(1).ResetStreak();
-            Assert.AreEqual(0, _fakeHitCombo.CurrentHitCombo);
 
             yield break;
         }
         
         [UnityTest]
-        public IEnumerator Failed_To_Save_Score_If_Current_Score_Equals_Saved_Highscore_When_Game_Lost()
+        public IEnumerator PlayerPrefsSetInt_OnGameLostCurrentScoreEqualsHighscore_NotCalled()
         {
             CommonInstall();
             
@@ -70,8 +66,9 @@ namespace PlaymodeTests
             yield break;
         }
         
+        
         [UnityTest]
-        public IEnumerator Failed_To_Save_Score_If_Current_Score_Less_Than_Saved_Highscore_When_Game_Lost()
+        public IEnumerator PlayerPrefsSetInt_OnGameLostCurrentScoreLessThanHighscore_NotCalled()
         {
             CommonInstall();
 
@@ -85,7 +82,7 @@ namespace PlaymodeTests
         }
         
         [UnityTest]
-        public IEnumerator Save_Score_If_Current_Score_Higher_Than_Saved_Highscore_When_Game_Lost()
+        public IEnumerator PlayerPrefsSetInt_OnGameLostCurrentScoreMoreThanHighscore_IsCalled()
         {
             CommonInstall();
             
